@@ -1,0 +1,26 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "8a6e9504-e27a-44e9-9e36-c352706fe8ff": {
+      "ProjectGuid": "8a6e9504-e27a-44e9-9e36-c352706fe8ff",
+      "DisplayName": "back-end",
+      "ColorIndex": 0
+    },
+    "d207cc43-d7e6-4189-b0bc-7e7fc9de288d": {
+      "ProjectGuid": "d207cc43-d7e6-4189-b0bc-7e7fc9de288d",
+      "DisplayName": "front-end",
+      "ColorIndex": 1
+    },
+    "919fd655-f067-4ba2-b932-d926e85dd6b4": {
+      "ProjectGuid": "919fd655-f067-4ba2-b932-d926e85dd6b4",
+      "DisplayName": "Script Documents",
+      "ColorIndex": 2
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 3
+}
