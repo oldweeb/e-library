@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace back_end.Domain
+﻿namespace back_end.Domain
 {
     public class Book : IEntityBase<ulong>
     {
