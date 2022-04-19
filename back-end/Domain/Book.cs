@@ -9,7 +9,5 @@ namespace back_end.Domain
         public string Description { get; set; }
         public string MainImagePath { get; set; }
         public string ContentPath { get; set; }
-        [ForeignKey("AuthorId")]
-        public Author Author { get; set; }
     }
 }

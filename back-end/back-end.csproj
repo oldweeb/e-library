@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="Resources\Avatars\" />
-    <Folder Include="Resources\Books\" />
+    <Folder Include="Resources\Books\Images\" />
+    <Folder Include="Resources\Books\Contents\" />
   </ItemGroup>
 
 </Project>

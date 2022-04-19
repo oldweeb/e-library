@@ -11,8 +11,8 @@ using back_end.DAL;
 namespace back_end.Migrations
 {
     [DbContext(typeof(ELibraryDbContext))]
-    [Migration("20220413084534_initial")]
-    partial class initial
+    [Migration("20220419143607_authorRemovedUpdate")]
+    partial class authorRemovedUpdate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,10 @@ namespace back_end.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(20,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
 
                     b.Property<string>("AvatarPath")
                         .IsRequired()
@@ -44,27 +47,6 @@ namespace back_end.Migrations
                     b.ToTable("Admins");
                 });
 
-            modelBuilder.Entity("back_end.Domain.Author", b =>
-                {
-                    b.Property<decimal>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("decimal(20,0)");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(35)");
-
-                    b.Property<string>("IconPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Authors");
-                });
-
             modelBuilder.Entity("back_end.Domain.Book", b =>
                 {
                     b.Property<decimal>("Id")
@@ -72,9 +54,6 @@ namespace back_end.Migrations
                         .HasColumnType("decimal(20,0)");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
-
-                    b.Property<decimal>("AuthorId")
-                        .HasColumnType("decimal(20,0)");
 
                     b.Property<string>("ContentPath")
                         .IsRequired()
@@ -94,8 +73,6 @@ namespace back_end.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
-
                     b.ToTable("Books");
                 });
 
@@ -105,7 +82,10 @@ namespace back_end.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.Property<decimal>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("decimal(20,0)");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<decimal>("Id"), 1L, 1);
 
                     b.Property<string>("AvatarPath")
                         .IsRequired()
@@ -118,22 +98,6 @@ namespace back_end.Migrations
                     b.HasKey("Email", "Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("back_end.Domain.Book", b =>
-                {
-                    b.HasOne("back_end.Domain.Author", "Author")
-                        .WithMany("Books")
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-                });
-
-            modelBuilder.Entity("back_end.Domain.Author", b =>
-                {
-                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

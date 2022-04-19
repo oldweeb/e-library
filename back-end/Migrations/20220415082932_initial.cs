@@ -13,7 +13,8 @@ namespace back_end.Migrations
                 columns: table => new
                 {
                     Email = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
+                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Password = table.Column<string>(type: "text", nullable: false),
                     AvatarPath = table.Column<string>(type: "nvarchar(100)", nullable: false)
                 },
@@ -41,7 +42,8 @@ namespace back_end.Migrations
                 columns: table => new
                 {
                     Email = table.Column<string>(type: "nvarchar(30)", nullable: false),
-                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false),
+                    Id = table.Column<decimal>(type: "decimal(20,0)", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Password = table.Column<string>(type: "text", nullable: false),
                     AvatarPath = table.Column<string>(type: "nvarchar(100)", nullable: false)
                 },

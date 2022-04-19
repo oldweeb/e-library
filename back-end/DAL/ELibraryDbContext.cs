@@ -7,7 +7,6 @@ namespace back_end.DAL
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Administrator> Admins { get; set; }
-        public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
 
         public ELibraryDbContext(DbContextOptions<ELibraryDbContext> options) : base(options)
@@ -21,6 +20,9 @@ namespace back_end.DAL
             modelBuilder.Entity<User>(eb =>
             {
                 eb.HasKey(u => new { u.Email, u.Id });
+
+                eb.Property(u => u.Id)
+                    .ValueGeneratedOnAdd();
 
                 eb.Property(u => u.AvatarPath)
                     .HasColumnType("nvarchar(100)")
@@ -39,6 +41,9 @@ namespace back_end.DAL
             {
                 eb.HasKey(a => new { a.Email, a.Id });
 
+                eb.Property(a => a.Id)
+                    .ValueGeneratedOnAdd();
+
                 eb.Property(u => u.AvatarPath)
                     .HasColumnType("nvarchar(100)")
                     .IsRequired();
@@ -56,10 +61,9 @@ namespace back_end.DAL
             {
                 eb.HasKey(b => b.Id);
 
-                // eb.HasOne(b => b.Author)
-                //     .WithMany(a => a.Books)
-                //     .HasForeignKey(b => b.Author);
-
+                eb.Property(b => b.Id)
+                    .ValueGeneratedOnAdd();
+                
                 eb.Property(b => b.Title)
                     .HasColumnType("nvarchar(35)")
                     .IsRequired();
@@ -73,19 +77,6 @@ namespace back_end.DAL
                     .IsRequired();
 
                 eb.Property(b => b.ContentPath)
-                    .HasColumnType("nvarchar(100)")
-                    .IsRequired();
-            });
-
-            modelBuilder.Entity<Author>(eb =>
-            {
-                eb.HasKey(a => a.Id);
-
-                eb.Property(a => a.FullName)
-                    .HasColumnType("nvarchar(35)")
-                    .IsRequired();
-
-                eb.Property(a => a.IconPath)
                     .HasColumnType("nvarchar(100)")
                     .IsRequired();
             });
