@@ -1,0 +1,7 @@
+.login input[type=submit] {
+  margin-top: 1rem;
+}
+
+.login input[type=submit][disabled] {
+  cursor: not-allowed;
+}
