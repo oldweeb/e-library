@@ -1,0 +1,43 @@
+.home-link {
+  text-decoration: none;
+  color: #fafafa !important;
+}
+
+.nav-link {
+  color: #fafafa;
+  text-decoration: none;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.active {
+  text-decoration: #fafafa underline;
+}
+
+.nav-link:hover {
+  color: #fafafa;
+}
+
+.nav-item {
+  margin: 0;
+  margin-left: 2rem;
+  padding: 0;
+}
+
+.nav-item:first-child {
+  margin-left: 5rem;
+}
+
+.my-profile {
+  color: #fafafa;
+  margin-right: 2rem;
+}
+
+.my-profile a {
+  color: #fafafa;
+  text-decoration: none;
+}
+
+.my-profile + button {
+  margin-right: 3rem;
+}

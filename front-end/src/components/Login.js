@@ -1,6 +1,6 @@
 import {useReducer} from 'react';
 import styles from './Login.module.css';
-import {Form} from 'react-bootstrap';
+import {Form, Modal, Button} from 'react-bootstrap';
 
 const INITIAL_INPUT_STATE = {
   value: '',
@@ -35,6 +35,8 @@ const Login = (props) => {
   const [emailState, dispatchEmail] = useReducer(emailReducer, INITIAL_INPUT_STATE);
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, INITIAL_INPUT_STATE);
   
+  const {status, error} = props;
+  
   const emailChangeHandler = (event) => {
     dispatchEmail({type: 'INPUT_CHANGE', value: event.target.value});
   };
@@ -53,46 +55,63 @@ const Login = (props) => {
   
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSubmit(
-      JSON.stringify({email: emailState.value, password: passwordState.value})
-    );
+    props.onSubmit({
+      body: JSON.stringify({email: emailState.value, password: passwordState.value}),
+      contentType: 'application/json'
+    });
   };
   
   const emailClasses = `${(emailState.isValid === false) && 'is-invalid'}`;
   const passwordClasses = `${(passwordState.isValid === false) && 'is-invalid'}`;
   
+  const disabled = !(emailState.isValid && passwordState.isValid)
+                    || status === 'pending';
+  
+  const submitButtonText = status === 'pending' ? 'Sending request...' : 'Login';
+  
   return (
-    <Form className={styles.login} onSubmit={submitHandler}>
-      <Form.Group controlId='email'>
-        <Form.Label>Email address</Form.Label>
-        <Form.Control
-          className={emailClasses}
-          type='email'
-          placeholder='test@domain.com'
-          name='email'
-          onChange={emailChangeHandler}
-          onBlur={validateEmail}
-        />
-      </Form.Group>
-      <Form.Group controlId='password'>
-        <Form.Label>Password</Form.Label>
-        <Form.Control
-          className={passwordClasses}
-          type='password'
-          placeholder='password'
-          name='password'
-          onChange={passwordChangeHandler}
-          onBlur={validatePassword}
-        />
-      </Form.Group>
-      <Form.Group controlId='submit'>
-        <Form.Control
-          type='submit'
-          value='Login'
-          disabled={!(emailState.isValid && passwordState.isValid)}
-        />
-      </Form.Group>
-    </Form>
+    <>
+      <Modal show={!!error} onHide={props.onReset}>
+        <Modal.Header closeButton>
+          <Modal.Title>Error occurred.</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{error}</Modal.Body>
+        <Modal.Footer>
+          <Button variant='primary' onClick={props.onReset}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+      <Form className={styles.login} onSubmit={submitHandler}>
+        <Form.Group controlId='email'>
+          <Form.Label>Email address</Form.Label>
+          <Form.Control
+            className={emailClasses}
+            type='email'
+            placeholder='test@domain.com'
+            name='email'
+            onChange={emailChangeHandler}
+            onBlur={validateEmail}
+          />
+        </Form.Group>
+        <Form.Group controlId='password'>
+          <Form.Label>Password</Form.Label>
+          <Form.Control
+            className={passwordClasses}
+            type='password'
+            placeholder='password'
+            name='password'
+            onChange={passwordChangeHandler}
+            onBlur={validatePassword}
+          />
+        </Form.Group>
+        <Form.Group controlId='submit'>
+          <Form.Control
+            type='submit'
+            value={submitButtonText}
+            disabled={disabled}
+          />
+        </Form.Group>
+      </Form>
+    </>
   );
 };
 

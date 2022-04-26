@@ -1,9 +1,9 @@
 const API_URL = '/api';
 
-export const login = async (formData, method) => {
+export const login = async (body, method) => {
   const response = await fetch(`${API_URL}/auth/${method}`, {
     method: 'POST',
-    body: formData
+    body: body
   });
   
   const data = await response.json();

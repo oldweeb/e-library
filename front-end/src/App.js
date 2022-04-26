@@ -1,16 +1,27 @@
-import { Routes, Route } from 'react-router-dom';
+import {Routes, Route, Navigate} from 'react-router-dom';
 import Welcome from './pages/Welcome';
 import {useSelector} from 'react-redux';
+import MainPage from './pages/MainPage';
+import Header from './components/Header';
 
 const App = () => {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   
   return (
-    <Routes>
-      {!isLoggedIn && <Route path='/*' element={<Welcome />} />}
-      {isLoggedIn && <Route path='/' element={<p>Hello!</p>}/>}
-      {/*<Route path='*' element={<NotFound />} />*/}
-    </Routes>
+    <>
+      {isLoggedIn && <Header />}
+      <Routes>
+        {!isLoggedIn && <Route path='/*' element={<Welcome />} />}
+        {isLoggedIn && (
+          <>
+            <Route path='/' element={<MainPage />} />
+            <Route path='/*' element={<Navigate to='/' />} />
+          </>
+        )}
+        {/*<Route path='*' element={<NotFound />} />*/}
+      </Routes>
+    </>
+    
   );
 };
 

@@ -87,11 +87,18 @@ const SignUp = (props) => {
   
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onSubmit(new FormData(event.target));
+    props.onSubmit({
+      body: new FormData(event.target)
+    })
   };
   
   const emailClasses = `${(emailState.isValid === false) && 'is-invalid'}`;
   const passwordClasses = `${(passwordState.isValid === false) && 'is-invalid'}`;
+  
+  const disabled = !(emailState.isValid && passwordState.isValid)
+                    || props.status === 'pending';
+  
+  const submitButtonText = props.status === 'pending' ? 'Sending request...' : 'Sign Up';
   
   return (
     <Form onSubmit={submitHandler} className={styles.signup}>
@@ -138,8 +145,8 @@ const SignUp = (props) => {
       <Form.Group controlId='submit'>
         <Form.Control
           type='submit'
-          value='Sign Up'
-          disabled={!(emailState.isValid && passwordState.isValid)}
+          value={submitButtonText}
+          disabled={disabled}
         />
       </Form.Group>
     </Form>

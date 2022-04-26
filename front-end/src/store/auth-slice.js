@@ -20,20 +20,24 @@ const calculateRemainingTime = (expirationTime) => {
 const getInitialState = () => {
   let storedToken = localStorage.getItem('token') || '';
   let storedExpirationTime = localStorage.getItem('expirationTime');
+  let role = localStorage.getItem('role');
   
   const remainingTime = calculateRemainingTime(storedExpirationTime);
   
   if (remainingTime <= 60 * 1000) {
     storedToken = null;
     storedExpirationTime = null;
+    role = null;
     localStorage.removeItem('token');
     localStorage.removeItem('expirationTime');
+    localStorage.removeItem('role');
   }
   
   return {
     token: storedToken,
     expirationTime: storedExpirationTime,
-    isLoggedIn: !!storedToken
+    isLoggedIn: !!storedToken,
+    role
   };
 };
 
@@ -42,18 +46,22 @@ const authSlice = createSlice({
   initialState: getInitialState(),
   reducers: {
     login(state, action) {
-      state.token = action.payload;
+      state.token = action.payload.token;
+      state.role = action.payload.role;
       const today = new Date();
       const expirationDate = today.addDays(1);
       state.expirationTime = expirationDate.toLocaleString();
       localStorage.setItem('token', action.payload);
       localStorage.setItem('expirationTime', expirationDate.toLocaleString());
+      state.isLoggedIn = true;
     },
     logout(state) {
       state.token = '';
       state.expirationTime = null;
       localStorage.removeItem('token');
       localStorage.removeItem('expirationTime');
+      state.isLoggedIn = false;
+      state.role = null;
     }
   }
 });

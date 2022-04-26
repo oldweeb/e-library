@@ -1,6 +1,14 @@
 import {useReducer, useCallback} from 'react';
 
 const httpReducer = (state, action) => {
+  if (action.type === 'CLEAR') {
+    return {
+      data: null,
+      error: null,
+      status: null
+    };
+  }
+  
   if (action.type === 'SEND') {
     return {
       data: null,
@@ -48,8 +56,13 @@ const useHttp = (requestFunction) => {
     }
   }, [requestFunction]);
   
+  const clearRequest = useCallback(() => {
+    dispatch({type: 'CLEAR'});
+  }, []);
+  
   return {
     sendRequest,
+    clearRequest,
     ...httpState
   }
 };
