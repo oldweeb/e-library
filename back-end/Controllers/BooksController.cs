@@ -91,6 +91,14 @@ namespace back_end.Controllers
         }
 
         [Authorize]
+        [HttpGet]
+        [Route("pageCount")]
+        public async Task<ActionResult> GetPageCount()
+        {
+            return Ok(new {PageCount = await _bookService.GetPageCountAsync()});
+        }
+
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> PostBook([FromForm] BookDTO book)
         {

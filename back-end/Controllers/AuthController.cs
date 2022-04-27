@@ -48,7 +48,8 @@ public class AuthController : ControllerBase
     {
         user.Email = user.Email.ToLower().Trim();
 
-        var existingUser = await _userService.ValidateAsync(user, true);
+        UserBase? existingUser = await _userService.ValidateAsync(user, true);
+        existingUser ??= await _adminService.ValidateAsync(user, true);
         if (existingUser is null)
         {
             return BadRequest(new { ErrorText = "Failed to verify user." });
@@ -56,7 +57,8 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Token = _jwtTokenService.GenerateJwt(existingUser)
+            Token = _jwtTokenService.GenerateJwt(existingUser),
+            Role = existingUser.GetType().Name
         });
     }
 
@@ -73,7 +75,8 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            Token = _jwtTokenService.GenerateJwt(@new)
+            Token = _jwtTokenService.GenerateJwt(@new),
+            Role = @new.GetType().Name
         });
     }
 }

@@ -97,5 +97,14 @@ namespace back_end.Services
             await _books.AddAsync(bookEntity);
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<int> GetPageCountAsync()
+        {
+            var bookCount = await _books.CountAsync();
+            var pageCount = bookCount / 10;
+            pageCount += bookCount % 10 == 0 ? 0 : 1;
+
+            return pageCount;
+        }
     }
 }
