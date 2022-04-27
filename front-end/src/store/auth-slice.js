@@ -51,7 +51,7 @@ const authSlice = createSlice({
       const today = new Date();
       const expirationDate = today.addDays(1);
       state.expirationTime = expirationDate.toLocaleString();
-      localStorage.setItem('token', action.payload);
+      localStorage.setItem('token', action.payload.token);
       localStorage.setItem('expirationTime', expirationDate.toLocaleString());
       state.isLoggedIn = true;
     },

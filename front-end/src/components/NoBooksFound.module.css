@@ -1,0 +1,16 @@
+.image {
+  height: 100%;
+  width: 45%;
+  display: flex;
+  justify-items: left;
+  align-items: flex-start;
+}
+
+.description {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 30%;
+  width: 65%;
+}

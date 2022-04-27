@@ -15,6 +15,7 @@ const App = () => {
         {isLoggedIn && (
           <>
             <Route path='/' element={<MainPage />} />
+            {/*<Route path='/books/:id' element={<BookPage />} />*/}
             <Route path='/*' element={<Navigate to='/' />} />
           </>
         )}

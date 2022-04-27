@@ -5,7 +5,7 @@ import styles from './Welcome.module.css';
 import SignUp from '../components/SignUp';
 import {useDispatch} from 'react-redux';
 import {authActions} from '../store/auth-slice';
-import {useCallback} from 'react';
+import {useCallback, useEffect} from 'react';
 import useHttp from '../hooks/use-http';
 
 const Welcome = (props) => {
@@ -21,8 +21,8 @@ const Welcome = (props) => {
   const redirectLink = isLogin ? 'signup' : 'login';
   
   const requestFunction = useCallback(async (initParams) => {
-    const method = isLogin ? 'login' : 'signup';
-    const response = await fetch(`/api/auth/${method}`, {
+    const endpoint = isLogin ? 'login' : 'signup';
+    const response = await fetch(`/api/auth/${endpoint}`, {
       method: 'POST',
       body: initParams.body,
       headers: {
@@ -59,9 +59,11 @@ const Welcome = (props) => {
     sendRequest(body);
   };
   
-  if (status === 'completed' && !error) {
-    dispatch(authActions.login(data));
-  }
+  useEffect(() => {
+    if (status === 'completed' && !error) {
+      dispatch(authActions.login(data));
+    }
+  }, [dispatch, status, error]);
   
   return (
     <Card className={styles.card}>
