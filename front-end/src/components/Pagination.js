@@ -46,6 +46,20 @@ const Pagination = (props) => {
     startAt = startAt + count > pageCount ? pageCount - 6 : startAt;
   }
   
+  const clickHandler = (page) => {
+    const search = props.params.get('search');
+    if (search) {
+      props.setSearchParams({
+        search,
+        p: page
+      });
+      
+      return;
+    }
+    
+    props.setSearchParams({p: page});
+  };
+  
   return (
     <PageList size='lg'>
       {active !== 1 && firstPrev}
@@ -53,7 +67,7 @@ const Pagination = (props) => {
         <PageList.Item
           key={page}
           active={page === active}
-          onClick={() => {props.setSearchParams({p: page})}}
+          onClick={() => clickHandler(page)}
         >
           {page}
         </PageList.Item>

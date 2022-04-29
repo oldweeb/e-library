@@ -6,10 +6,11 @@ import useHttp from '../hooks/use-http';
 import {useSelector} from 'react-redux';
 import DownloadBook from '../components/DownloadBook';
 import NoBooksFound from '../components/NoBooksFound';
+import DeleteBook from '../components/DeleteBook';
 
 const Book = (props) => {
   const {id} = useParams();
-  const token = useSelector(state => state.auth.token);
+  const {token, role} = useSelector(state => state.auth);
   
   const getBookRequest = useCallback(async () => {
     const response = await fetch(`/api/books/${id}`, {
@@ -130,6 +131,7 @@ const Book = (props) => {
             {imageContent}
             {bookContent}
             <DownloadBook id={id} className={styles.download} />
+            {role === 'Administrator' && <DeleteBook className={styles.delete} id={id} />}
           </>
         )}
       </Card.Body>

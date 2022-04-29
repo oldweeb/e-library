@@ -8,7 +8,7 @@ const DownloadBook = (props) => {
   const token = useSelector(({auth}) => auth.token);
   const [download, setDownload] = useState(false);
   
-  const getContentRequest = useCallback(async() => {
+  const getContentRequest = useCallback(async () => {
     const response = await fetch(`/api/books/${id}/content`, {
       method: 'GET',
       headers: {

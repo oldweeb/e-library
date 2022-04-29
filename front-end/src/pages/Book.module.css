@@ -17,22 +17,31 @@
 }
 
 .container-body:not(.not-found) {
-  margin: 10rem auto;
+  margin: 10rem 30rem;
   display: grid;
   grid-template-areas: "i   t"
                        "i   d"
-                       "g   g";
+                       "i   d"
+                       "g   g"
+                       "r   r";
+  grid-template-columns: 1fr 2fr;
   grid-column-gap: 5rem;
+  grid-row-gap: 1rem;
   text-align: center;
 }
 
 .title {
   grid-area: t;
   text-decoration: underline;
+  align-self: center;
+  word-wrap: break-word;
 }
 
 .description {
   grid-area: d;
+  overflow-wrap: break-word;
+  max-width: 30rem;
+  text-align: left;
 }
 
 .main-image {
@@ -43,6 +52,10 @@
   grid-area: g;
 }
 
-.download:disabled {
+.delete {
+  grid-area: r;
+}
+
+button:disabled {
   cursor: not-allowed;
 }

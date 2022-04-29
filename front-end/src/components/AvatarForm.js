@@ -34,6 +34,7 @@ const AvatarForm = (props) => {
               ref={inputRef}
               isInvalid={inputIsValid === false}
               onChange={avatarChangedHandler}
+              accept='.jpg,.png,.jpeg,.bmp'
             />
           </Form.Group>
           <Button variant='outline-primary' type='submit'>Update Avatar</Button>

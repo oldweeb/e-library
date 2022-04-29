@@ -5,9 +5,10 @@ import MainPage from './pages/MainPage';
 import Header from './components/Header';
 import Profile from './pages/Profile';
 import Book from './pages/Book';
+import Upload from './pages/Upload';
 
 const App = () => {
-  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+  const {isLoggedIn, role} = useSelector(state => state.auth);
   
   return (
     <>
@@ -23,6 +24,9 @@ const App = () => {
             <Route path='/' element={<MainPage />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/book/:id' element={<Book />} />
+            {role === 'Administrator' && (
+              <Route path='/upload' element={<Upload />} />
+            )}
             <Route path='/*' element={<Navigate to='/' />} />
           </>
         )}

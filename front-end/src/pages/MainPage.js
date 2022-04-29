@@ -17,7 +17,7 @@ const MainPage = (props) => {
   
   const booksForPageRequest = useCallback(async () => {
     let url = `/api/books?pageNumber=${pageNumber}`;
-    if (search !== null) {
+    if (search) {
       url = `/api/books?search=${search}&pageNumber=${pageNumber}`;
     }
     
@@ -36,7 +36,7 @@ const MainPage = (props) => {
     }
     
     return data.books;
-  }, [pageNumber, search]);
+  }, [pageNumber, search, token]);
   
   const {
     sendRequest,
@@ -46,7 +46,12 @@ const MainPage = (props) => {
   } = useHttp(booksForPageRequest);
   
   const pageCountRequest = useCallback(async() => {
-    const response = await fetch('/api/books/pageCount', {
+    let url = '/api/books/pageCount';
+    if (search) {
+      url += `?search=${search}`
+    }
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -56,7 +61,7 @@ const MainPage = (props) => {
     
     const data = await response.json();
     return data.pageCount;
-  }, []);
+  }, [search, token]);
   
   const {
     sendRequest: getPageCount,
@@ -72,7 +77,7 @@ const MainPage = (props) => {
     }
     
     sendRequest();
-  }, [pageNumber, sendRequest]);
+  }, [pageNumber, sendRequest, setSearchParams]);
   
   useEffect(() => {
     if (status === 'completed' && !error) {
@@ -82,7 +87,7 @@ const MainPage = (props) => {
   
   useEffect(() => {
     getPageCount();
-  }, []);
+  }, [getPageCount]);
   
   let content;
   
@@ -114,6 +119,7 @@ const MainPage = (props) => {
         <Pagination
           pageCount={pageCount}
           active={pageNumber}
+          params={searchParams}
           setSearchParams={setSearchParams}
         />
       )}
