@@ -1,6 +1,5 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {authActions} from '../store/auth-slice';
 import useHttp from '../hooks/use-http';
 import styles from './Profile.module.css';
 import {Card, Image, Placeholder, Toast} from 'react-bootstrap';

@@ -83,7 +83,7 @@ const Book = (props) => {
       <Card className='bg-dark'>
         <Card.Body className={styles.book}>
           {imgContent}
-          <Link to={`/books/${id}`}>{props.title}</Link>
+          <Link to={`/book/${id}`}>{props.title}</Link>
         </Card.Body>
       </Card>
     </li>
