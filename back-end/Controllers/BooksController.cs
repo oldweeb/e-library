@@ -93,9 +93,9 @@ namespace back_end.Controllers
         [Authorize]
         [HttpGet]
         [Route("pageCount")]
-        public async Task<ActionResult> GetPageCount()
+        public async Task<ActionResult> GetPageCount([FromQuery] string? search)
         {
-            return Ok(new {PageCount = await _bookService.GetPageCountAsync()});
+            return Ok(new {PageCount = await _bookService.GetPageCountAsync(search)});
         }
 
         [Authorize]
@@ -126,6 +126,34 @@ namespace back_end.Controllers
             {
                 return BadRequest(new { ErrorText = $"Failed to upload book. \nException message: {ex.Message}" });
             }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> DeleteBook(ulong id)
+        {
+            Claim? emailClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "email-address");
+            if (emailClaim is null)
+            {
+                return BadRequest(new { ErrorText = "Email claim is null." });
+            }
+
+            var email = emailClaim.Value.ToLower();
+
+            Administrator? admin = await _adminService.FindAsync(email);
+
+            if (admin is null)
+            {
+                return Forbid();
+            }
+
+            if (await _bookService.DeleteAsync(id))
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
     }
 }

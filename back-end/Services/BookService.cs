@@ -102,13 +102,36 @@ namespace back_end.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<int> GetPageCountAsync()
+        public async Task<int> GetPageCountAsync(string? search)
         {
-            var bookCount = await _books.CountAsync();
+            int bookCount;
+            if (search is null or "")
+            {
+                bookCount = await _books.CountAsync();
+            }
+            else
+            {
+                var books = await GetAsync(search);
+                bookCount = books.Count();
+            }
+
             var pageCount = bookCount / 10;
             pageCount += bookCount % 10 == 0 ? 0 : 1;
 
             return pageCount;
+        }
+
+        public async Task<bool> DeleteAsync(ulong id)
+        {
+            var book = await FindAsync(id);
+            if (book is null)
+            {
+                return false;
+            }
+
+            _dbContext.Entry(book).State = EntityState.Deleted;
+            await _dbContext.SaveChangesAsync();
+            return true;
         }
 
         private async Task<IEnumerable<Book>> GetAsync(string search)

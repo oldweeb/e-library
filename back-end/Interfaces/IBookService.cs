@@ -10,6 +10,7 @@ namespace back_end.Interfaces
         Task<byte[]> GetBookMainImageAsync(ulong id);
         Task<byte[]> GetBookContentAsync(ulong id);
         Task AddAsync(BookDTO book);
-        Task<int> GetPageCountAsync();
+        Task<int> GetPageCountAsync(string? search);
+        Task<bool> DeleteAsync(ulong id);
     }
 }
