@@ -53,7 +53,7 @@ namespace back_end.Controllers
                 return NotFound();
             }
 
-            return Ok(new { Book = new { book.Id, book.Title, book.Description } });
+            return Ok(new {book.Id, book.Title, book.Description});
         }
 
         [Authorize]
