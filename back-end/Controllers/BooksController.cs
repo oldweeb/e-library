@@ -21,11 +21,11 @@ namespace back_end.Controllers
         }
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult> GetBooks([FromQuery] int pageNumber)
+        public async Task<ActionResult> GetBooks([FromQuery] string? search, [FromQuery] int pageNumber)
         {
             try
             {
-                IEnumerable<Book> books = await _bookService.GetAsync(pageNumber);
+                IEnumerable<Book> books = await _bookService.GetAsync(search, pageNumber);
                 return Ok(new
                 {
                     Books = books.Select(book => new { book.Id, book.Title })

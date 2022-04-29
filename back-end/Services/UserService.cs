@@ -82,6 +82,14 @@ public class UserService : IUserService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task UpdatePasswordAsync(User user, string @new)
+    {
+        var password = PasswordHandler.Encrypt(@new);
+        user.Password = password;
+        _dbContext.Entry(user).State = EntityState.Modified;
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<User?> FindAsync(ulong id)
     {
         return await _users.FirstOrDefaultAsync(user => user.Id == id);

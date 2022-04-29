@@ -10,4 +10,5 @@ public interface IService<T> where T : UserBase
     Task<T?> FindAsync(ulong id);
     Task<T?> FindAsync(string email);
     Task UpdateAvatarAsync(string email, IFormFile file);
+    Task UpdatePasswordAsync(T user, string @new);
 }

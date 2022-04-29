@@ -1,4 +1,6 @@
-﻿using back_end.DAL;
+﻿using System.Linq.Expressions;
+using System.Text.RegularExpressions;
+using back_end.DAL;
 using back_end.Domain;
 using back_end.Domain.DTOs;
 using back_end.Interfaces;
@@ -25,7 +27,7 @@ namespace back_end.Services
             return await _books.FirstOrDefaultAsync(book => book.Id == id);
         }
 
-        public async Task<IEnumerable<Book>> GetAsync(int pageNumber)
+        public async Task<IEnumerable<Book>> GetAsync(string? search, int pageNumber)
         {
             if (pageNumber <= 0)
             {
@@ -35,12 +37,14 @@ namespace back_end.Services
             const int booksPerPage = 10;
             int firstBookIndex = (pageNumber - 1) * booksPerPage;
 
-            if (firstBookIndex >= _books.Count())
+            if (search is null)
             {
-                throw new ArgumentOutOfRangeException(nameof(pageNumber), "Such page does not exist.");
+                return firstBookIndex >= await _books.CountAsync()
+                    ? throw new ArgumentOutOfRangeException(nameof(pageNumber), "Such page does not exist.")
+                    : _books.Skip(firstBookIndex).Take(booksPerPage);
             }
 
-            return _books.Skip(firstBookIndex).Take(booksPerPage);
+            return (await GetAsync(search)).Skip(firstBookIndex).Take(booksPerPage);
         }
 
         public async Task<byte[]> GetBookMainImageAsync(ulong id)
@@ -105,6 +109,31 @@ namespace back_end.Services
             pageCount += bookCount % 10 == 0 ? 0 : 1;
 
             return pageCount;
+        }
+
+        private async Task<IEnumerable<Book>> GetAsync(string search)
+        {
+            search = search.ToLower();
+            var wordRegex = new Regex(@"\w(?<!\d)[\w'-]*");
+
+            var words = wordRegex
+                .Matches(search)
+                .Select(match => match.Value)
+                .ToArray();
+
+            var allBooks = _books.AsEnumerable();
+
+            var books = allBooks
+                .Where(book => book.Title.ToLower() == search)
+                .Concat(_books.Where(book => book.Title.ToLower().Contains(search)));
+
+            books = books.Concat(
+                allBooks
+                    .Where(book => words.Any(book.Title.ToLower().Contains))
+                    .OrderByDescending(book => words.Count(book.Title.ToLower().Contains))
+            );
+
+            return books.DistinctBy(book => book.Id);
         }
     }
 }

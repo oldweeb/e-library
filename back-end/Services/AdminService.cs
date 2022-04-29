@@ -82,5 +82,13 @@ namespace back_end.Services
             _dbContext.Entry(admin).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task UpdatePasswordAsync(Administrator user, string @new)
+        {
+            var password = PasswordHandler.Encrypt(@new);
+            user.Password = password;
+            _dbContext.Entry(user).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

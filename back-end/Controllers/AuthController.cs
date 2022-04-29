@@ -1,4 +1,5 @@
-﻿using back_end.Domain;
+﻿using System.Security.Claims;
+using back_end.Domain;
 using back_end.Domain.DTOs;
 using back_end.Interfaces;
 using back_end.Services;
@@ -60,6 +61,58 @@ public class AuthController : ControllerBase
             Token = _jwtTokenService.GenerateJwt(existingUser),
             Role = existingUser.GetType().Name
         });
+    }
+
+    [Authorize]
+    [HttpPut]
+    [Route("update")]
+    public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
+    {
+        Claim? emailClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "email-address");
+        if (emailClaim is null)
+        {
+            return BadRequest(new { ErrorText = "Email claim is null." });
+        }
+
+        var email = emailClaim.Value.ToLower();
+        var user = new UserDTO
+        {
+            Email = email.ToLower(),
+            Password = request.Old
+        };
+
+        UserBase? existingUser = await _userService.ValidateAsync(user, true);
+        existingUser ??= await _adminService.ValidateAsync(user, true);
+        if (existingUser is null)
+        {
+            return BadRequest(new {ErrorText = "Invalid old password."});
+        }
+
+        if (existingUser is User u)
+        {
+            await _userService.UpdatePasswordAsync(u, request.New);
+        }
+
+        if (existingUser is Administrator a)
+        {
+            await _adminService.UpdatePasswordAsync(a, request.New);
+        }
+
+        return Ok(new {Token = _jwtTokenService.GenerateJwt(existingUser)});
+    }
+
+    [Authorize]
+    [HttpGet]
+    public async Task<ActionResult> GetEmail()
+    {
+        Claim? emailClaim = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "email-address");
+        if (emailClaim is null)
+        {
+            return BadRequest(new { ErrorText = "Email claim is null." });
+        }
+
+        var email = emailClaim.Value.ToLower();
+        return Ok(new {Email = email});
     }
 
     private async Task<ActionResult> SignUp<T>(UserDTO user, IService<T> service) where T : UserBase

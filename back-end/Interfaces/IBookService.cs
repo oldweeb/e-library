@@ -6,7 +6,7 @@ namespace back_end.Interfaces
     public interface IBookService
     {
         Task<Book?> FindAsync(ulong id);
-        Task<IEnumerable<Book>> GetAsync(int pageNumber);
+        Task<IEnumerable<Book>> GetAsync(string? search, int pageNumber);
         Task<byte[]> GetBookMainImageAsync(ulong id);
         Task<byte[]> GetBookContentAsync(ulong id);
         Task AddAsync(BookDTO book);
