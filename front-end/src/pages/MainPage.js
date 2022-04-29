@@ -13,9 +13,15 @@ const MainPage = (props) => {
   const [books, setBooks] = useState([]);
   const token = useSelector(state => state.auth.token);
   const pageNumber = parseInt(searchParams.get('p'));
+  const search = searchParams.get('search');
   
   const booksForPageRequest = useCallback(async () => {
-    const response = await fetch(`/api/books?pageNumber=${pageNumber}`, {
+    let url = `/api/books?pageNumber=${pageNumber}`;
+    if (search !== null) {
+      url = `/api/books?search=${search}&pageNumber=${pageNumber}`;
+    }
+    
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -30,7 +36,7 @@ const MainPage = (props) => {
     }
     
     return data.books;
-  }, [pageNumber]);
+  }, [pageNumber, search]);
   
   const {
     sendRequest,
@@ -104,7 +110,7 @@ const MainPage = (props) => {
   return (
     <Card className={styles.container}>
       <Card.Body className={styles['container-body-content']}>{content}</Card.Body>
-      {!error && (
+      {(!error && books.length !== 0) && (
         <Pagination
           pageCount={pageCount}
           active={pageNumber}

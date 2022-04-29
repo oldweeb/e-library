@@ -1,5 +1,5 @@
-import {Link, NavLink} from 'react-router-dom';
-import {Navbar, Container, Nav, Button} from 'react-bootstrap';
+import {Link, NavLink, useNavigate} from 'react-router-dom';
+import {Navbar, Container, Nav, Button, Form} from 'react-bootstrap';
 import {useSelector, useDispatch} from 'react-redux';
 import {authActions} from '../store/auth-slice';
 import styles from './Header.module.css';
@@ -7,6 +7,7 @@ import styles from './Header.module.css';
 const Header = (props) => {
   const role = useSelector(state => state.auth.role);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
   const activeClassName = ({isActive}) => isActive
       ? `${styles.active} ${styles['nav-link']}`
@@ -15,6 +16,15 @@ const Header = (props) => {
   const logoutHandler = () => {
     dispatch(authActions.logout());
   };
+  
+  const searchSubmitHandler = (event) => {
+    event.preventDefault();
+    if (event.target['search'].value.length < 3) {
+      return;
+    }
+    
+    navigate(`/?search=${event.target['search'].value}&p=1`);
+  }
   
   return (
     <Navbar bg='primary' sticky='top'>
@@ -43,6 +53,15 @@ const Header = (props) => {
           )}
         </Nav>
       </Container>
+      <Form onSubmit={searchSubmitHandler} className={`d-flex ${styles['search-control']}`}>
+        <Form.Control
+          type='search'
+          placeholder='Search'
+          className='me-2'
+          name='search'
+        />
+        <Button type='submit' variant='outline-info'>Search</Button>
+      </Form>
       <Button variant='outline-info' className={styles['my-profile']}>
         <Link to='profile'>My Profile</Link>
       </Button>

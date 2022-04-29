@@ -41,3 +41,11 @@
 .my-profile + button {
   margin-right: 3rem;
 }
+
+.search-control {
+  margin-right: 1rem;
+}
+
+.search-control button {
+  color: #fafafa;
+}

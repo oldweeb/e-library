@@ -38,7 +38,7 @@ const Book = (props) => {
   
   useEffect(() => {
     sendRequest();
-  }, []);
+  }, [sendRequest]);
   
   useEffect(() => {
     if (status === 'completed' && !!data) {
@@ -49,7 +49,14 @@ const Book = (props) => {
   let imgContent;
   
   if (status === 'pending') {
-    imgContent = <Placeholder animation='glow' as='span'  />;
+    imgContent = (
+      <Placeholder
+        bg='light'
+        animation='glow'
+        as='span'
+        style={{width: '10rem', height: '15rem' }}
+      />
+    );
   }
   
   if (status === 'completed' && !!data) {

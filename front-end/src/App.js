@@ -3,6 +3,7 @@ import Welcome from './pages/Welcome';
 import {useSelector} from 'react-redux';
 import MainPage from './pages/MainPage';
 import Header from './components/Header';
+import Profile from './pages/Profile';
 
 const App = () => {
   const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
@@ -11,11 +12,16 @@ const App = () => {
     <>
       {isLoggedIn && <Header />}
       <Routes>
-        {!isLoggedIn && <Route path='/*' element={<Welcome />} />}
+        {!isLoggedIn && (
+          <>
+            <Route path='/*' element={<Welcome />} />
+          </>
+        )}
         {isLoggedIn && (
           <>
             <Route path='/' element={<MainPage />} />
             {/*<Route path='/books/:id' element={<BookPage />} />*/}
+            <Route path='/profile' element={<Profile />} />
             <Route path='/*' element={<Navigate to='/' />} />
           </>
         )}

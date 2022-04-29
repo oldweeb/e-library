@@ -53,6 +53,7 @@ const authSlice = createSlice({
       state.expirationTime = expirationDate.toLocaleString();
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('expirationTime', expirationDate.toLocaleString());
+      localStorage.setItem('role', action.payload.role);
       state.isLoggedIn = true;
     },
     logout(state) {
@@ -60,8 +61,18 @@ const authSlice = createSlice({
       state.expirationTime = null;
       localStorage.removeItem('token');
       localStorage.removeItem('expirationTime');
+      localStorage.removeItem('role');
       state.isLoggedIn = false;
       state.role = null;
+    },
+    updatePassword(state, action) {
+      state.token = action.payload;
+      const today = new Date();
+      const expirationDate = today.addDays(1);
+      state.expirationTime = expirationDate.toLocaleString();
+      localStorage.setItem('token', action.payload);
+      localStorage.setItem('expirationTime', expirationDate.toLocaleString());
+      state.isLoggedIn = true;
     }
   }
 });

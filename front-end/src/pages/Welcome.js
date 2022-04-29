@@ -69,16 +69,16 @@ const Welcome = (props) => {
     <Card className={styles.card}>
       <Card.Body>
         <Routes>
-          <Route path='login' element=
-            {<Login
+          <Route path='login' element={
+            <Login
               onSubmit={loginHandler}
               onReset={clearRequest}
               status={status}
               error={error}
             />}
           />
-          <Route path='signup' element=
-            {<SignUp
+          <Route path='signup' element={
+            <SignUp
               onSubmit={signUpHandler}
               onReset={clearRequest}
               status={status}

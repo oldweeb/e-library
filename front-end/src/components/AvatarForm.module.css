@@ -1,0 +1,12 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form button {
+  margin-top: 1rem;
+}
+
+.card {
+  height: 10rem !important;
+}
