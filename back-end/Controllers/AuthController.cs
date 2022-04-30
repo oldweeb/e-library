@@ -15,16 +15,19 @@ public class AuthController : ControllerBase
     private readonly JwtTokenService _jwtTokenService;
     private readonly IUserService _userService;
     private readonly IAdminService _adminService;
+    private readonly IUserValidator _userValidator;
 
     public AuthController(
         JwtTokenService tokenService,
         IUserService userService,
-        IAdminService adminService
+        IAdminService adminService,
+        IUserValidator userValidator
     )
     {
         _jwtTokenService = tokenService;
         _userService = userService;
         _adminService = adminService;
+        _userValidator = userValidator;
     }
 
     [AllowAnonymous]
@@ -33,6 +36,18 @@ public class AuthController : ControllerBase
     public async Task<ActionResult> SignUp([FromForm] UserDTO user)
     {
         user.Email = user.Email.Trim().ToLower();
+
+        var result = _userValidator.IsValid(user);
+
+        if (result is ValidationResult.EmailInvalid)
+        {
+            return BadRequest(new {ErrorText = "Invalid email."});
+        }
+
+        if (result is ValidationResult.PasswordInvalid)
+        {
+            return BadRequest(new {ErrorText = "Invalid password."});
+        }
 
         if (user.Role == UserRole.Admin)
         {
@@ -80,6 +95,11 @@ public class AuthController : ControllerBase
             Email = email.ToLower(),
             Password = request.Old
         };
+
+        if (_userValidator.IsValid(user) is not ValidationResult.Valid)
+        {
+            return BadRequest(new {ErrorText = "Password must be at least of length 8 and contain 1 digit, 1 special symbol, 1 upper case and 1 lower case letter."});
+        }
 
         UserBase? existingUser = await _userService.ValidateAsync(user, true);
         existingUser ??= await _adminService.ValidateAsync(user, true);

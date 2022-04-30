@@ -27,7 +27,8 @@ services.AddScoped<IPathContainer, PathContainer>()
     .AddScoped<IUserService, UserService>()
     .AddScoped<IAdminService, AdminService>()
     .AddScoped<IFileService, FileService>()
-    .AddScoped<IBookService, BookService>();
+    .AddScoped<IBookService, BookService>()
+    .AddScoped<IUserValidator, UserValidator>();
 
 services.AddCors(c =>
     {
