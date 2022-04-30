@@ -2,7 +2,7 @@ import {useSelector} from 'react-redux';
 import {Button, Card, Form, Modal, Overlay, Tooltip} from 'react-bootstrap';
 import styles from './Upload.module.css';
 import useHttp from '../hooks/use-http';
-import {useCallback, useEffect, useRef, useState} from 'react';
+import {useCallback, useRef} from 'react';
 import {Navigate} from 'react-router-dom';
 
 const Upload = (props) => {
@@ -24,7 +24,7 @@ const Upload = (props) => {
     if (!response.ok) {
       throw new Error('Failed to upload book.');
     }
-  }, [token])
+  }, [token]);
   
   const {
     sendRequest,

@@ -22,13 +22,18 @@ const Welcome = (props) => {
   
   const requestFunction = useCallback(async (initParams) => {
     const endpoint = isLogin ? 'login' : 'signup';
+    const headers = {
+      'Accept': 'application/json'
+    };
+    
+    if (isLogin) {
+      headers['Content-Type'] = initParams.contentType;
+    }
+    
     const response = await fetch(`/api/auth/${endpoint}`, {
       method: 'POST',
       body: initParams.body,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': initParams.contentType || ''
-      }
+      headers
     });
     
     const data = await response.json();
@@ -51,7 +56,7 @@ const Welcome = (props) => {
     data
   } = useHttp(requestFunction);
   
-  const signUpHandler = async (formData) => {
+  const signUpHandler = (formData) => {
     sendRequest(formData);
   };
   
@@ -63,7 +68,7 @@ const Welcome = (props) => {
     if (status === 'completed' && !error) {
       dispatch(authActions.login(data));
     }
-  }, [dispatch, status, error]);
+  }, [dispatch, status, error, data]);
   
   return (
     <Card className={styles.card}>
@@ -92,7 +97,6 @@ const Welcome = (props) => {
         </div>
       </Card.Body>
     </Card>
-    
   );
 };
 
